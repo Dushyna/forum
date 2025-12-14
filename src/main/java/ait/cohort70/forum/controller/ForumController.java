@@ -18,11 +18,13 @@ public class ForumController {
     private final ForumService forumService;
 
     @PostMapping("/forum/post/{user}")
+    @ResponseStatus(HttpStatus.CREATED)
     public PostAuthorDto addPost(@PathVariable String user, @RequestBody PostDto postDto) {
         return forumService.addPost(user, postDto);
     }
 
     @GetMapping("/forum/post/{postId}")
+    //@ResponseStatus(HttpStatus.NOT_FOUND)
     public PostAuthorDto findPostById(@PathVariable Long postId) {
         return forumService.findPostById(postId);
     }
