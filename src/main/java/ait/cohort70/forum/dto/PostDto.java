@@ -1,12 +1,25 @@
 package ait.cohort70.forum.dto;
 
-import lombok.Getter;
+import lombok.*;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class PostDto {
+    private Long id;
     private String title;
     private String content;
-    private List<String> tags;
+    private String author;
+    private LocalDateTime dateCreated;
+    @Singular
+    private Set<String> tags;
+    private Integer likes;
+    @Singular
+    private List<CommentDto> comments;
 }
