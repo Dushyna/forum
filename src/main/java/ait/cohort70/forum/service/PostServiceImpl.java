@@ -79,7 +79,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public PostDto deletePost(Long id) {
         Post post = postRepositoty.findById(id).orElseThrow(PostNotFoundException::new);
-       commentRepository.deleteAll(post.getComments());
+       // commentRepository.deleteAll(post.getComments());
         postRepositoty.delete(post);
         return modelMapper.map(post, PostDto.class);
     }
@@ -90,7 +90,7 @@ public class PostServiceImpl implements PostService {
         Comment comment = new Comment(author, newCommentDto.getMessage());
         Post post = postRepositoty.findById(id).orElseThrow(PostNotFoundException::new);
         comment.setPost(post);
-       // post.addComment(comment);  // Можно не делать
+        // post.addComment(comment);  // Можно не делать
         commentRepository.save(comment);
 
         return modelMapper.map(post, PostDto.class);
