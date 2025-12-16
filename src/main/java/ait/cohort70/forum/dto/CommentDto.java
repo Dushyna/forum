@@ -1,18 +1,19 @@
 package ait.cohort70.forum.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class CommentDto {
+    @JsonProperty("user")
     private String userName;
     private String message;
     private LocalDateTime dateCreated;
