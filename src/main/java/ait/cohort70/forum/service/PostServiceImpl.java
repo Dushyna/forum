@@ -109,7 +109,7 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional(readOnly = true)
     public Iterable<PostDto> findPostsByTags(List<String> tags) {
-        return postRepositoty.findByTagsNameIgnoreCaseIn(tags)
+        return postRepositoty.findDistinctByTagsNameIgnoreCaseIn(tags)
                 .map(x -> modelMapper.map(x, PostDto.class)).toList();
     }
 
