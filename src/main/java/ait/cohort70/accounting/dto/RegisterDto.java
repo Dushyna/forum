@@ -15,6 +15,6 @@ public class RegisterDto {
     private String firstName;
     private String lastName;
     @Singular
-    private Set<Roles> roles;
+    private Set<String> roles;
 
 }

@@ -13,5 +13,5 @@ import java.util.Set;
 public class RoleDto {
     private String login;
     @Singular
-    private Set<Roles> roles;
+    private Set<String> roles;
 }
