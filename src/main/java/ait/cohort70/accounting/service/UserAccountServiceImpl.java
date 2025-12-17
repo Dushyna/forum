@@ -12,6 +12,7 @@ import ait.cohort70.accounting.dto.exception.UserNotFoundException;
 import ait.cohort70.accounting.model.UserAccount;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 public class UserAccountServiceImpl implements UserAccountService {
     private final UserAccountRepository userAccountRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDto register(UserRegisterDto userRegisterDto) {
@@ -27,6 +29,8 @@ public class UserAccountServiceImpl implements UserAccountService {
         }
         UserAccount userAccount = modelMapper.map(userRegisterDto, UserAccount.class);
         userAccount.addRole("USER");
+        String encodedPassword = passwordEncoder.encode(userRegisterDto.getPassword());
+        userAccount.setPassword(encodedPassword);
         userAccountRepository.save(userAccount);
         return modelMapper.map(userAccount, UserDto.class);
     }
@@ -84,7 +88,8 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public void changePassword(String login, String newPassword) {
         UserAccount userAccount = userAccountRepository.findById(login).orElseThrow(UserNotFoundException::new);
-        userAccount.setPassword(newPassword);
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        userAccount.setPassword(encodedPassword);
         userAccountRepository.save(userAccount);
 
     }
