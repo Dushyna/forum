@@ -12,3 +12,6 @@ spring:
      # ddl-auto: update
       ddl-auto: none
       show-sql: true
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}

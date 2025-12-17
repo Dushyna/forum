@@ -1,0 +1,14 @@
+package ait.cohort70.accounting.dto.exception;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+@NoArgsConstructor
+public class InvalidDataException extends RuntimeException {
+    public InvalidDataException(String message){
+        super(message);
+    }
+}
