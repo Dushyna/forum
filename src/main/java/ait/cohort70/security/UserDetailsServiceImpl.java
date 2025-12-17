@@ -26,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .map(role -> "ROLE_" +role.name())
                 .toList();
 
-        return new User(username, "{noop}" + userAccount.getPassword(), AuthorityUtils.createAuthorityList(roles));
+        return new User(username, userAccount.getPassword(), AuthorityUtils.createAuthorityList(roles));
 
     }
 }
