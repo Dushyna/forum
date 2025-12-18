@@ -20,9 +20,9 @@ public class UserAccountController {
     }
 
     @PostMapping("/login")
-    public UserDto login() {
-        // TODO get username from header
-        return userAccountService.getUser("login") ;
+    public UserDto login(Principal principal) {
+
+        return userAccountService.getUser(principal.getName()) ;
     }
 
     @DeleteMapping("/user/{login}")
@@ -47,9 +47,9 @@ public class UserAccountController {
 
     @PatchMapping("/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void changePassword( @RequestBody NewPasswordDto newPasswordDto) {
-        // TODO get username from header
-       userAccountService.changePassword("username", newPasswordDto.getPassword());
+    public void changePassword(Principal principal, @RequestBody NewPasswordDto newPasswordDto) {
+
+       userAccountService.changePassword(principal.getName(), newPasswordDto.getPassword());
     }
 
     @GetMapping("/user/{login}")
