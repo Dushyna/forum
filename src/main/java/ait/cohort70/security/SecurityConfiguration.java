@@ -21,32 +21,29 @@ public class SecurityConfiguration {
 
     @Bean
     SecurityFilterChain getSecurityFilterChain(HttpSecurity http) throws Exception {
+        http.cors(Customizer.withDefaults());
         http.httpBasic(Customizer.withDefaults());
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/account/register","/forum/posts/**")
+                .requestMatchers("/account/register", "/forum/posts/**")
                 .permitAll()
                 .requestMatchers("/account/user/{login}/role/{role}")
                 .hasRole(Role.ADMINISTRATOR.name())
-                .requestMatchers(HttpMethod.PATCH, "/account/user/{login}","/forum/post/{id}/comment/{login}")
+                .requestMatchers(HttpMethod.PATCH, "/account/user/{login}", "/forum/post/{id}/comment/{login}")
                 .access(new WebExpressionAuthorizationManager("#login==authentication.name"))
                 .requestMatchers(HttpMethod.DELETE, "/account/user/{login}")
                 .access(new WebExpressionAuthorizationManager("#login==authentication.name or hasRole('ADMINISTRATOR')"))
-                .requestMatchers(HttpMethod.POST,"/forum/post/{author}")
+                .requestMatchers(HttpMethod.POST, "/forum/post/{author}")
                 .access(new WebExpressionAuthorizationManager("#author==authentication.name"))
-                .requestMatchers(HttpMethod.PATCH,"/forum/post/{id}")
+                .requestMatchers(HttpMethod.PATCH, "/forum/post/{id}")
                 .access((authentication, context) ->
                         new AuthorizationDecision(webSecurity.isPostOwner(authentication.get().getName(), context.getVariables().get("id"))))
-                .requestMatchers(HttpMethod.DELETE,"/forum/post/{id}")
-                .access((authentication, context) ->{
+                .requestMatchers(HttpMethod.DELETE, "/forum/post/{id}")
+                .access((authentication, context) -> {
                     boolean isAuthor = webSecurity.isPostOwner(authentication.get().getName(), context.getVariables().get("id"));
                     boolean isModerator = context.getRequest().isUserInRole(Role.MODERATOR.name());
-                       return new AuthorizationDecision(isAuthor || isModerator);
+                    return new AuthorizationDecision(isAuthor || isModerator);
                 })
-
-
-
-
                 .anyRequest()
                 .authenticated()
         );
