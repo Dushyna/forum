@@ -25,9 +25,7 @@ public class SecurityConfiguration {
         http.httpBasic(Customizer.withDefaults());
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/account/register", "/forum/posts/**")
-                .permitAll()
-                .requestMatchers("/account/register","/forum/posts/**", "/error")
+                .requestMatchers("/account/register", "/forum/posts/**", "/error")
                 .permitAll()
                 .requestMatchers("/account/user/{login}/role/{role}")
                 .hasRole(Role.ADMINISTRATOR.name())
