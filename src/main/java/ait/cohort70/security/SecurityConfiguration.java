@@ -27,6 +27,8 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/account/register", "/forum/posts/**")
                 .permitAll()
+                .requestMatchers("/account/register","/forum/posts/**", "/error")
+                .permitAll()
                 .requestMatchers("/account/user/{login}/role/{role}")
                 .hasRole(Role.ADMINISTRATOR.name())
                 .requestMatchers(HttpMethod.PATCH, "/account/user/{login}", "/forum/post/{id}/comment/{login}")
