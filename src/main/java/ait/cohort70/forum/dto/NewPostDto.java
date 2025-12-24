@@ -16,6 +16,7 @@ public class NewPostDto {
     @Size(min = 3, max = 100, message = "Title must be between 5 and 100 characters")
     private String title;
     @NotBlank(message = "Content cannot be empty")
+    @Size(min = 10, message = "Content must be between 5 and 100 characters")
     private String content;
     private Set<String> tags;
 }

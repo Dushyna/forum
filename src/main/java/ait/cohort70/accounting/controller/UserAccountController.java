@@ -32,7 +32,7 @@ public class UserAccountController {
     }
 
     @PatchMapping("/user/{login}")
-    public UserDto updateUser(@PathVariable String login, @RequestBody UserEditDto userEditDto) {
+    public UserDto updateUser(@PathVariable String login, @RequestBody @Valid UserEditDto userEditDto) {
         return userAccountService.updateUser(login, userEditDto);
     }
 
