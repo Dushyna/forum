@@ -58,15 +58,26 @@ public class SecurityConfiguration {
     @Bean
     UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST","PATCH","DELETE"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Content-Length", "Host", "Accept",
-                "Accept-Encoding","User-Agent"));
-        configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L);
+        configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"));
+        configuration.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
+//    @Bean
+//    UrlBasedCorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+//        configuration.setAllowedMethods(Arrays.asList("GET","POST","PATCH","DELETE"));
+//        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Content-Length", "Host", "Accept",
+//                "Accept-Encoding","User-Agent"));
+//        configuration.setAllowCredentials(true);
+//        configuration.setMaxAge(3600L);
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 
 }

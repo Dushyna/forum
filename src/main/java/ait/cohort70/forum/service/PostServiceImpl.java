@@ -10,7 +10,9 @@ import ait.cohort70.forum.dto.exceptions.PostNotFoundException;
 import ait.cohort70.forum.model.Comment;
 import ait.cohort70.forum.model.Post;
 import ait.cohort70.forum.model.Tag;
+import ait.cohort70.forum.service.loging.PostLogger;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+//@Slf4j(topic = "Post Service")
 public class PostServiceImpl implements PostService {
     private final PostRepositoty postRepositoty;
     private final TagRepository tagRepository;
@@ -47,11 +50,13 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDto findPostById(Long id) {
         Post post = postRepositoty.findById(id).orElseThrow(PostNotFoundException::new);
+       // log.info("Retrieved post with ID {}",id);
         return modelMapper.map(post, PostDto.class);
     }
 
     @Override
     @Transactional
+    @PostLogger
     public void addLike(Long id) {
         Post post = postRepositoty.findById(id).orElseThrow(PostNotFoundException::new);
         post.addLike();
@@ -61,6 +66,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
+    @PostLogger
     public PostDto updatePost(Long id, NewPostDto newPostDto) {
         Post post = postRepositoty.findById(id).orElseThrow(PostNotFoundException::new);
         if (newPostDto.getTitle() != null) post.setTitle(newPostDto.getTitle());

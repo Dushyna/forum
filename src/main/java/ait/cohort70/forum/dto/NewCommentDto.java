@@ -1,5 +1,6 @@
 package ait.cohort70.forum.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,5 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class NewCommentDto {
+    @NotBlank(message = "Comment cannot be empty")
     private String message;
 }

@@ -2,6 +2,7 @@ package ait.cohort70.accounting.controller;
 
 import ait.cohort70.accounting.dto.*;
 import ait.cohort70.accounting.service.UserAccountService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class UserAccountController {
     private final UserAccountService userAccountService;
 
     @PostMapping("/register")
-    public UserDto register(@RequestBody UserRegisterDto userRegisterDto) {
+    public UserDto register(@Valid @RequestBody UserRegisterDto userRegisterDto) {
         return userAccountService.register(userRegisterDto);
     }
 
@@ -47,7 +48,7 @@ public class UserAccountController {
 
     @PatchMapping("/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void changePassword(Principal principal, @RequestBody NewPasswordDto newPasswordDto) {
+    public void changePassword(Principal principal, @Valid @RequestBody NewPasswordDto newPasswordDto) {
 
        userAccountService.changePassword(principal.getName(), newPasswordDto.getPassword());
     }
