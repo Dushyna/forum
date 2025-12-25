@@ -1,6 +1,5 @@
 package ait.cohort70.forum.model;
 
-import ait.cohort70.forum.dto.CommentDto;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -31,16 +30,18 @@ public class Post {
     private String author;
     @Column(name="date_created")
     private LocalDateTime  dateCreated= LocalDateTime.now();
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name="posts_tags",
             joinColumns= @JoinColumn(name="post_id"),
             inverseJoinColumns=  @JoinColumn(name = "tag_name")
     )
+
     private Set<Tag> tags = new HashSet<>();
     @Column(name="likes")
     private int likes;
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+   // @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     public Post(String title, String content, String author) {

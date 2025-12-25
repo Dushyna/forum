@@ -12,7 +12,6 @@ import ait.cohort70.forum.model.Post;
 import ait.cohort70.forum.model.Tag;
 import ait.cohort70.forum.service.loging.PostLogger;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,8 +85,11 @@ public class PostServiceImpl implements PostService {
     public PostDto deletePost(Long id) {
         Post post = postRepositoty.findById(id).orElseThrow(PostNotFoundException::new);
        // commentRepository.deleteAll(post.getComments());
+        PostDto postDto = modelMapper.map(post, PostDto.class);
+
         postRepositoty.delete(post);
-        return modelMapper.map(post, PostDto.class);
+      //  return modelMapper.map(post, PostDto.class);
+        return postDto;
     }
 
     @Override
