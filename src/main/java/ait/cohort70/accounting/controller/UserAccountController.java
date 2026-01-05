@@ -57,4 +57,10 @@ public class UserAccountController {
     public UserDto getUser(@PathVariable String login) {
         return userAccountService.getUser(login);
     }
+
+    @PostMapping("/email")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void sendEmail(@RequestBody @Valid EmailDto emailDto){
+        userAccountService.sendEmail(emailDto);
+    }
 }
