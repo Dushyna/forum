@@ -1,12 +1,15 @@
 package ait.cohort70.forum.service;
 
 import ait.cohort70.forum.dao.CommentRepository;
+import ait.cohort70.forum.dao.FileRepository;
 import ait.cohort70.forum.dao.PostRepositoty;
 import ait.cohort70.forum.dao.TagRepository;
+import ait.cohort70.forum.dto.FileDto;
 import ait.cohort70.forum.dto.NewCommentDto;
 import ait.cohort70.forum.dto.NewPostDto;
 import ait.cohort70.forum.dto.PostDto;
 import ait.cohort70.forum.dto.exceptions.PostNotFoundException;
+import ait.cohort70.forum.model.AttachedFile;
 import ait.cohort70.forum.model.Comment;
 import ait.cohort70.forum.model.Post;
 import ait.cohort70.forum.model.Tag;
@@ -15,11 +18,14 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +34,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepositoty postRepositoty;
     private final TagRepository tagRepository;
     private final CommentRepository commentRepository;
+    private final FileRepository fileRepository;
     private final ModelMapper modelMapper;
 
     @Override
@@ -49,7 +56,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDto findPostById(Long id) {
         Post post = postRepositoty.findById(id).orElseThrow(PostNotFoundException::new);
-       // log.info("Retrieved post with ID {}",id);
+        // log.info("Retrieved post with ID {}",id);
         return modelMapper.map(post, PostDto.class);
     }
 
@@ -84,11 +91,11 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public PostDto deletePost(Long id) {
         Post post = postRepositoty.findById(id).orElseThrow(PostNotFoundException::new);
-       // commentRepository.deleteAll(post.getComments());
+        // commentRepository.deleteAll(post.getComments());
         PostDto postDto = modelMapper.map(post, PostDto.class);
 
         postRepositoty.delete(post);
-      //  return modelMapper.map(post, PostDto.class);
+        //  return modelMapper.map(post, PostDto.class);
         return postDto;
     }
 
@@ -129,6 +136,30 @@ public class PostServiceImpl implements PostService {
 
         return postRepositoty.findByDateCreatedBetween(startOfDay, endOfDay)
                 .map(x -> modelMapper.map(x, PostDto.class)).toList();
+    }
+
+    @Override
+    @Transactional
+    public void addFileToPost(Long id, MultipartFile file) {
+        Post post = postRepositoty.findById(id).orElseThrow(PostNotFoundException::new);
+
+        try {
+            AttachedFile attachedFile = new AttachedFile(file.getOriginalFilename(), file.getContentType(), file.getBytes());
+            attachedFile.setPost(post);
+            fileRepository.save(attachedFile);
+        } catch (IOException e) {
+           e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Iterable<FileDto> getFileFromPost(Long id) {
+        Post foundPost = postRepositoty.findById(id).orElseThrow(PostNotFoundException::new);
+        return fileRepository.findByPost(foundPost)
+                .map(file -> modelMapper.map(file, FileDto.class)).toList();
+
     }
 
 

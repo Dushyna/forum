@@ -44,6 +44,9 @@ public class Post {
     @OneToMany(mappedBy = "post", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    private List<AttachedFile> files = new ArrayList<>();
+
     public Post(String title, String content, String author) {
         this.title = title;
         this.content = content;
@@ -61,6 +64,8 @@ public class Post {
         comments.add(comment);
     }
 
+    //public void addFile(AttachedFile attachedFile){ files.add(attachedFile);}
+
     public void addLike(){
         likes++;
     }
@@ -70,4 +75,5 @@ public class Post {
 
 
     }
+
 }

@@ -1,8 +1,10 @@
 package ait.cohort70.forum.controller;
 
+import ait.cohort70.forum.dto.FileDto;
 import ait.cohort70.forum.dto.NewCommentDto;
 import ait.cohort70.forum.dto.PostDto;
 import ait.cohort70.forum.dto.NewPostDto;
+import ait.cohort70.forum.model.AttachedFile;
 import ait.cohort70.forum.service.PostService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +12,9 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -70,5 +74,15 @@ public class PostController {
         return postService.findPostsByPeriod(from, to);
     }
 
+    @PatchMapping("/post/{id}/file/upload")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void addFileToPost(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
+        postService.addFileToPost(id, file);
+    }
+
+    @GetMapping("/post/{id}/file")
+    public Iterable<FileDto> getFileFromPost(@PathVariable Long id) throws IOException {
+        return postService.getFileFromPost(id);
+    }
 
 }
